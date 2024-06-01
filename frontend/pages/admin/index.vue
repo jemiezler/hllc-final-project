@@ -13,6 +13,10 @@
                     <v-card title="New Activity">
                         <v-card-text>
                             <v-row dense>
+                                <!-- <v-col cols="12">
+                                    <v-file-input v-model="newActivity.picture" label="Upload Image"
+                                        accept="image/*"></v-file-input>
+                                </v-col> -->
                                 <v-col cols="12">
                                     <v-text-field v-model="newActivity.name" label="Activity Name"
                                         required></v-text-field>
@@ -21,6 +25,14 @@
                                     <v-text-field v-model="newActivity.description" label="Activity Description"
                                         required></v-text-field>
                                 </v-col>
+                                <!-- <v-col cols="12" sm="6">
+                                    <v-text-field v-model="newActivity.date" type=date label="Date"
+                                        required></v-text-field>
+                                </v-col> -->
+                                <!-- <v-col cols="12" sm="6">
+                                    <v-text-field v-model="newActivity.time" type=time label="Time"
+                                        required></v-text-field>
+                                </v-col> -->
 
                                 <v-col cols="12" sm="6">
                                     <v-select :items="['How to Live', 'How to Learn']" label="Activity Type"
@@ -88,9 +100,9 @@
                                 <div class="text-center">
                                     <v-rating :model-value=activity.rating color="yellow-darken-3" half-increments
                                         density="compact" readonly></v-rating>
-                                    <p class="text-grey-darken-1">{{activity.rating}} {{ activity.reviews }}</p>
+                                    <p class="text-grey-darken-1">{{ activity.rating }} - {{ activity.reviews }} reviews
+                                    </p>
                                 </div>
-                                <!-- {{ activity.rating }} -->
                             </td>
                             <td>
                                 <v-menu>
@@ -116,7 +128,7 @@
                                         <v-card-actions>
                                             <v-spacer></v-spacer>
                                             <v-btn color="red darken-1" text
-                                                @click="deleteActivity(currentActivity)">Delete</v-btn>
+                                                @click="deleteActivity(currentActivity._id)">Delete</v-btn>
                                             <v-btn color="blue darken-1" text
                                                 @click="deleteDialog = false">Cancel</v-btn>
                                         </v-card-actions>
@@ -126,6 +138,10 @@
                                     <v-card title="Edit Activity">
                                         <v-card-text>
                                             <v-row dense>
+                                                <!-- <v-col cols="12">
+                                                    <v-file-input v-model="editedActivity.picture" label="Upload Image"
+                                                        accept="image/*"></v-file-input>
+                                                </v-col> -->
                                                 <v-col cols="12">
                                                     <v-text-field v-model="editedActivity.name
                                                         " hide-details="auto" label="Activity Name"
@@ -135,6 +151,14 @@
                                                     <v-text-field v-model="editedActivity.description"
                                                         label="Activity Description" required></v-text-field>
                                                 </v-col>
+                                                <v-col cols="12" sm="6">
+                                                    <v-text-field v-model="editedActivity.date" type=date label="Date"
+                                                        required></v-text-field>
+                                                </v-col>
+                                                <!-- <v-col cols="12" sm="6">
+                                                    <v-text-field v-model="editedActivity.time" type=time label="Time"
+                                                        required></v-text-field>
+                                                </v-col> -->
 
                                                 <v-col cols="12" sm="6">
                                                     <v-select :items="['How to Live', 'How to Learn']"
@@ -148,10 +172,12 @@
                                                         label="School" auto-select-first multiple
                                                         v-model="editedActivity.school"></v-autocomplete>
                                                 </v-col>
+                                                <v-col cols="12">
+                                                    <v-select :items="['Active', 'Pending', 'Done', 'Disable']"
+                                                        label="Activity Type" v-model="editedActivity.status"
+                                                        required></v-select>
+                                                </v-col>
                                             </v-row>
-
-                                            <small class="text-caption text-medium-emphasis">*indicates required
-                                                field</small>
                                         </v-card-text>
 
                                         <v-divider></v-divider>
@@ -162,7 +188,7 @@
                                             <v-btn text="Close" variant="plain" @click="editDialog = false"></v-btn>
 
                                             <v-btn color="primary" text="Save" variant="tonal"
-                                                @click="saveEditedActivity"></v-btn>
+                                                @click="saveEditedActivity(editedActivity._id)"></v-btn>
                                         </v-card-actions>
                                     </v-card>
                                 </v-dialog>
@@ -185,13 +211,19 @@ const editedActivity = ref({
     id: 0,
     name: '',
     description: '',
+    date: '',
+    time: '',
     type: '',
     school: []
 });
+console.log('Edited Activity:', editedActivity);
 const newActivity = ref({
+    picture: '',
     name: '',
     description: '',
     type: '',
+    date: '',
+    time: '',
     school: [],
     status: '',
     participateRate: '0',
@@ -199,63 +231,63 @@ const newActivity = ref({
     reviews: 0
 });
 
-const activities = ref([
-    {
-        id: 1,
-        name: 'Hiking Adventure',
-        description: 'Explore the wilderness and enjoy breathtaking views.',
-        type: 'How to Live',
-        school: ['Liberal Arts', 'Science'],
-        status: 'Active',
-        participateRate: '75',
-        rating: 4.5,
-        reviews: 413
-    },
-    {
-        id: 2,
-        name: 'Cooking Class',
-        description: 'Learn to cook delicious meals from professional chefs.',
-        type: 'How to Learn',
-        school: ['Culinary Arts'],
-        status: 'Pending',
-        participateRate: '60',
-        rating: 4.0,
-        reviews: 320
-    },
-    {
-        id: 3,
-        name: 'Yoga Retreat',
-        description: 'Relax your mind and body with yoga sessions in a peaceful environment.',
-        type: 'How to Live',
-        school: ['Health Science'],
-        status: 'Done',
-        participateRate: '90',
-        rating: 4.8,
-        reviews: 580
-    },
-    {
-        id: 4,
-        name: 'Coding Workshop',
-        description: 'Improve your coding skills with hands-on projects and mentorship.',
-        type: 'How to Learn',
-        school: ['Information Technology'],
-        status: 'Disable',
-        participateRate: '50',
-        rating: 4.2,
-        reviews: 250
-    },
-    {
-        id: 5,
-        name: 'Art Exhibition',
-        description: 'Experience creativity and inspiration at a local art showcase.',
-        type: 'How to Live',
-        school: ['Fine Arts'],
-        status: 'Active',
-        participateRate: '80',
-        rating: 4.7,
-        reviews: 480
-    }
-]);
+// const activities = ref([
+//     {
+//         id: 1,
+//         name: 'Hiking Adventure',
+//         description: 'Explore the wilderness and enjoy breathtaking views.',
+//         type: 'How to Live',
+//         school: ['Liberal Arts', 'Science'],
+//         status: 'Active',
+//         participateRate: '75',
+//         rating: 4.5,
+//         reviews: 413
+//     },
+//     {
+//         id: 2,
+//         name: 'Cooking Class',
+//         description: 'Learn to cook delicious meals from professional chefs.',
+//         type: 'How to Learn',
+//         school: ['Culinary Arts'],
+//         status: 'Pending',
+//         participateRate: '60',
+//         rating: 4.0,
+//         reviews: 320
+//     },
+//     {
+//         id: 3,
+//         name: 'Yoga Retreat',
+//         description: 'Relax your mind and body with yoga sessions in a peaceful environment.',
+//         type: 'How to Live',
+//         school: ['Health Science'],
+//         status: 'Done',
+//         participateRate: '90',
+//         rating: 4.8,
+//         reviews: 580
+//     },
+//     {
+//         id: 4,
+//         name: 'Coding Workshop',
+//         description: 'Improve your coding skills with hands-on projects and mentorship.',
+//         type: 'How to Learn',
+//         school: ['Information Technology'],
+//         status: 'Disable',
+//         participateRate: '50',
+//         rating: 4.2,
+//         reviews: 250
+//     },
+//     {
+//         id: 5,
+//         name: 'Art Exhibition',
+//         description: 'Experience creativity and inspiration at a local art showcase.',
+//         type: 'How to Live',
+//         school: ['Fine Arts'],
+//         status: 'Active',
+//         participateRate: '80',
+//         rating: 4.7,
+//         reviews: 480
+//     }
+// ]);
 
 const deleteActivityDialog = (activity) => {
     currentActivity.value = activity;
@@ -267,28 +299,59 @@ const editActivityDialog = (activity) => {
     editedActivity.value = { ...activity };
     editDialog.value = true;
 };
-const saveEditedActivity = () => {
-    // Your save logic here, for example:
-    const index = activities.value.findIndex(activity => activity.id === editedActivity.value.id);
-    if (index !== -1) {
-        activities.value[index] = { ...editedActivity.value };
+const saveEditedActivity = async (editedActivityId) => {
+    try {
+        const response = await fetch(`http://localhost:3000/activity/${editedActivityId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(editedActivity.value)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to save edited activity');
+        }
+        const index = activities.value.findIndex(activity => activity.id === editedActivity.value.id);
+        if (index !== -1) {
+            activities.value[index] = { ...editedActivity.value };
+        }
+        editDialog.value = false;
+    } catch (error) {
+        console.error('Error saving edited activity:', error);
     }
-    editDialog.value = false;
 };
 
-const saveNewActivity = () => {
-    activities.value.push({ ...newActivity.value });
-    newActivity.value = {
-        name: '',
-        description: '',
-        type: '',
-        school: [],
-        status: '',
-        participateRate: '0',
-        rating: 0,
-        reviews: 0
-    };
-    addDialog.value = false; // Assuming addDialog is a reactive variable controlling the dialog visibility
+const saveNewActivity = async () => {
+    try {
+        const response = await fetch('http://localhost:3000/activity/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newActivity.value)
+        });
+        if (!response.ok) {
+            throw new Error('Failed to save new activity');
+        }
+        const data = await response.json();
+        activities.value.push(data);
+        newActivity.value = {
+            picture: '',
+            name: '',
+            description: '',
+            type: '',
+            school: [],
+            status: '',
+            date: '',
+            time: '',
+            participateRate: '0',
+            rating: 0,
+            reviews: 0
+        };
+        addDialog.value = false;
+    } catch (error) {
+        console.error('Error saving new activity:', error);
+    }
 };
 
 
@@ -305,30 +368,34 @@ const getStatusColor = (status) => {
     }
 };
 
-const deleteActivity = (activity) => {
-    const index = activities.value.findIndex((a) => a.id === activity.id);
-    if (index !== -1) {
-        activities.value.splice(index, 1);
+const deleteActivity = async (Id) => {
+    try {
+        const response = await fetch(`http://localhost:3000/activity/${Id}`, {
+            method: 'DELETE'
+        });
+        if (!response.ok) {
+            throw new Error('Failed to delete activity');
+        }
+        const index = activities.value.findIndex((a) => a.id === currentActivity.value.id);
+        if (index !== -1) {
+            activities.value.splice(index, 1);
+        }
+        deleteDialog.value = false;
+    } catch (error) {
+        console.error('Error deleting activity:', error);
     }
-    deleteDialog.value = false;
 };
-// const router = useRouter();
-// const goToActivity = () => {
-//     router.push('/admin/${activity.id}');
-// };
 
+const activities = ref([]);
 
-//   const activities = ref([]);
-
-//   async function fetchData() {
-//     try {
-//       const response = await fetch('http://localhost:3000/activity/');
-//       const data = await response.json();
-//       activities.value = data;
-//     } catch (error) {
-//       console.error('Error fetching activities:', error);
-//     }
-//   }
-
-//fetchData();
+async function fetchData() {
+    try {
+        const response = await fetch('http://localhost:3000/activity/');
+        const data = await response.json();
+        activities.value = data;
+    } catch (error) {
+        console.error('Error fetching activities:', error);
+    }
+}
+fetchData();
 </script>
