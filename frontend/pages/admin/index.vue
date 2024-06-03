@@ -4,70 +4,72 @@
             <v-col>
                 <h1>Activity List</h1>
             </v-col>
-            <v-col cols="12" d-flex justify-end>
-                <v-dialog v-model="addDialog" max-width="600">
-                    <template v-slot:activator="{ props: activatorProps }">
-                        <v-btn icon="mdi-plus" v-bind="activatorProps"></v-btn>
-                    </template>
-
-                    <v-card title="New Activity">
-                        <v-card-text>
-                            <v-row dense>
-                                <!-- <v-col cols="12">
-                                    <v-file-input v-model="newActivity.picture" label="Upload Image"
-                                        accept="image/*"></v-file-input>
-                                </v-col> -->
-                                <v-col cols="12">
-                                    <v-text-field v-model="newActivity.name" label="Activity Name"
-                                        required></v-text-field>
-                                </v-col>
-                                <v-col cols="12">
-                                    <v-text-field v-model="newActivity.description" label="Activity Description"
-                                        required></v-text-field>
-                                </v-col>
-                                <!-- <v-col cols="12" sm="6">
-                                    <v-text-field v-model="newActivity.date" type=date label="Date"
-                                        required></v-text-field>
-                                </v-col> -->
-                                <!-- <v-col cols="12" sm="6">
-                                    <v-text-field v-model="newActivity.time" type=time label="Time"
-                                        required></v-text-field>
-                                </v-col> -->
-
-                                <v-col cols="12" sm="6">
-                                    <v-select :items="['How to Live', 'How to Learn']" label="Activity Type"
-                                        v-model="newActivity.type" required></v-select>
-                                </v-col>
-
-                                <v-col cols="12" sm="6">
-                                    <v-autocomplete
-                                        :items="['Liberal Arts', 'Science', 'Management', 'Information Technology', 'Agro-Industry', 'Law', 'Cosmetic Science', 'Health Science', 'Nursing Science', 'Anti-Aging and Regenerative Medicine', 'Medicine', 'Dentistry', 'Social innovation', 'Sinology', 'Integrative-medicine']"
-                                        label="School" v-model="newActivity.school" auto-select-first
-                                        multiple></v-autocomplete>
-                                </v-col>
-                                <v-col cols="12">
-                                    <v-select :items="['Active', 'Pending', 'Done', 'Disable']" label="Activity Type"
-                                        v-model="newActivity.status" required></v-select>
-                                </v-col>
-                            </v-row>
-                        </v-card-text>
-
-                        <v-divider></v-divider>
-
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-
-                            <v-btn text="Close" variant="plain" @click="addDialog = false"></v-btn>
-
-                            <v-btn color="primary" text="Save" variant="tonal" @click=saveNewActivity></v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-            </v-col>
-            <v-col>
-
-            </v-col>
             <v-col cols="12">
+                <v-col cols="12" d-flex justify-end>
+                    <v-dialog v-model="addDialog" max-width="600">
+                        <template v-slot:activator="{ props: activatorProps }">
+                            <v-btn prepend-icon="mdi-plus" v-bind="activatorProps" class="rounded-pill" color="#36393f" >
+                                New Activity
+                            </v-btn>
+                        </template>
+
+                        <v-card title="New Activity">
+                            <v-card-text>
+                                <v-row dense>
+                                    <v-col cols="12">
+                                        <v-text-field v-model="newActivity.name" label="Activity Name"
+                                            required></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12">
+                                        <v-text-field v-model="newActivity.description" label="Activity Description"
+                                            required></v-text-field>
+                                    </v-col>
+
+                                    <v-col cols="12" sm="6">
+                                        <v-select :items="['How to Live', 'How to Learn']" label="Activity Type"
+                                            v-model="newActivity.type" required></v-select>
+                                    </v-col>
+
+                                    <v-col cols="12" sm="6">
+                                        <v-autocomplete
+                                            :items="['Liberal Arts', 'Science', 'Management', 'Information Technology', 'Agro-Industry', 'Law', 'Cosmetic Science', 'Health Science', 'Nursing Science', 'Anti-Aging and Regenerative Medicine', 'Medicine', 'Dentistry', 'Social innovation', 'Sinology', 'Integrative-medicine']"
+                                            label="School" v-model="newActivity.school" auto-select-first
+                                            multiple></v-autocomplete>
+                                    </v-col>
+                                    <v-col cols="12">
+                                        <v-select :items="['Active', 'Pending', 'Done', 'Disable']"
+                                            label="Activity Type" v-model="newActivity.status" required></v-select>
+                                    </v-col>
+                                    <!-- <v-col cols="12" sm="6">
+                                    <v-text-field v-model="newActivity.date" type="date" label="Date"
+                                        required></v-text-field>
+                                </v-col>
+                                <v-col cols="12" sm="6">
+                                    <v-text-field v-model="newActivity.time" type="time" label="Time"
+                                        required></v-text-field>
+                                </v-col> -->
+                                    <v-col cols="12">
+                                        <v-text-field v-model="newActivity.place" label="Place" required></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12">
+                                        <v-text-field v-model="newActivity.picture" label="URL Picture"
+                                            required></v-text-field>
+                                    </v-col>
+                                </v-row>
+                            </v-card-text>
+
+                            <v-divider></v-divider>
+
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+
+                                <v-btn text="Close" variant="plain" @click="addDialog = false"></v-btn>
+
+                                <v-btn color="primary" text="Save" variant="tonal" @click=saveNewActivity></v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </v-col>
                 <v-table theme="light" class="my-4">
                     <thead>
                         <tr>
@@ -151,10 +153,6 @@
                                                     <v-text-field v-model="editedActivity.description"
                                                         label="Activity Description" required></v-text-field>
                                                 </v-col>
-                                                <v-col cols="12" sm="6">
-                                                    <v-text-field v-model="editedActivity.date" type=date label="Date"
-                                                        required></v-text-field>
-                                                </v-col>
                                                 <!-- <v-col cols="12" sm="6">
                                                     <v-text-field v-model="editedActivity.time" type=time label="Time"
                                                         required></v-text-field>
@@ -176,6 +174,23 @@
                                                     <v-select :items="['Active', 'Pending', 'Done', 'Disable']"
                                                         label="Activity Type" v-model="editedActivity.status"
                                                         required></v-select>
+                                                </v-col>
+                                                <!-- <v-col cols="12" sm="6">
+                                                    <v-text-field v-model="editedActivity.date" type="date" label="Date"
+                                                        required></v-text-field>
+                                                </v-col>
+                                                <v-col cols="12" sm="6">
+                                                    <v-text-field v-model="editedActivity.time" type="time" label="Time"
+                                                        required></v-text-field>
+                                                </v-col> -->
+                                                <v-col cols="12">
+                                                    <v-text-field v-model="editedActivity.place" label="Place"
+                                                        required></v-text-field>
+                                                </v-col>
+
+                                                <v-col cols="12">
+                                                    <v-text-field v-model="editedActivity.picture" label="URL Picture"
+                                                        required></v-text-field>
                                                 </v-col>
                                             </v-row>
                                         </v-card-text>
@@ -211,10 +226,13 @@ const editedActivity = ref({
     id: 0,
     name: '',
     description: '',
-    date: '',
-    time: '',
+    date: new Date().toISOString(),  // Updated for date editing
+    time: '', // Updated for time editing
+    place: '',
     type: '',
-    school: []
+    picture: '',
+    school: [],
+    status: ''
 });
 console.log('Edited Activity:', editedActivity);
 const newActivity = ref({
@@ -222,8 +240,9 @@ const newActivity = ref({
     name: '',
     description: '',
     type: '',
-    date: '',
-    time: '',
+    date: new Date().toISOString(), // Format date as ISO string
+    time: new Date().toISOString(), // Example time format
+    place: '',
     school: [],
     status: '',
     participateRate: '0',
@@ -231,63 +250,7 @@ const newActivity = ref({
     reviews: 0
 });
 
-// const activities = ref([
-//     {
-//         id: 1,
-//         name: 'Hiking Adventure',
-//         description: 'Explore the wilderness and enjoy breathtaking views.',
-//         type: 'How to Live',
-//         school: ['Liberal Arts', 'Science'],
-//         status: 'Active',
-//         participateRate: '75',
-//         rating: 4.5,
-//         reviews: 413
-//     },
-//     {
-//         id: 2,
-//         name: 'Cooking Class',
-//         description: 'Learn to cook delicious meals from professional chefs.',
-//         type: 'How to Learn',
-//         school: ['Culinary Arts'],
-//         status: 'Pending',
-//         participateRate: '60',
-//         rating: 4.0,
-//         reviews: 320
-//     },
-//     {
-//         id: 3,
-//         name: 'Yoga Retreat',
-//         description: 'Relax your mind and body with yoga sessions in a peaceful environment.',
-//         type: 'How to Live',
-//         school: ['Health Science'],
-//         status: 'Done',
-//         participateRate: '90',
-//         rating: 4.8,
-//         reviews: 580
-//     },
-//     {
-//         id: 4,
-//         name: 'Coding Workshop',
-//         description: 'Improve your coding skills with hands-on projects and mentorship.',
-//         type: 'How to Learn',
-//         school: ['Information Technology'],
-//         status: 'Disable',
-//         participateRate: '50',
-//         rating: 4.2,
-//         reviews: 250
-//     },
-//     {
-//         id: 5,
-//         name: 'Art Exhibition',
-//         description: 'Experience creativity and inspiration at a local art showcase.',
-//         type: 'How to Live',
-//         school: ['Fine Arts'],
-//         status: 'Active',
-//         participateRate: '80',
-//         rating: 4.7,
-//         reviews: 480
-//     }
-// ]);
+
 
 const deleteActivityDialog = (activity) => {
     currentActivity.value = activity;

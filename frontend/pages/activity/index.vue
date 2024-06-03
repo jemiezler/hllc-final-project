@@ -5,15 +5,24 @@
                 <h1>Activity List</h1>
             </v-col>
             <v-col cols="12">
+                <!-- Filter Button -->
+                <v-btn-toggle v-model="selectedFilter" class="mb-4" background-color="transparent"
+                    active-class="primary">
+                    <v-btn value="all" class="rounded-pill">All</v-btn>
+                    <v-btn value="active" class="rounded-pill">Active</v-btn>
+                    <v-btn value="done" class="rounded-pill">Done</v-btn>
+                    <v-btn value="pending" class="rounded-pill">Pending</v-btn>
+                </v-btn-toggle>
+                <!-- Activity Cards -->
                 <v-row>
                     <v-col v-for="activity in filteredActivities" :key="activity._id" cols="12" sm="6" md="4">
-                        <nuxt-link :to="`/activity/${activity.id}`">
+                        <nuxt-link :to="`/activity/${activity._id}`" class="text-decoration-none">
                             <v-card>
-                                <v-img :src="activity.picture || 'default-image.jpg'" aspect-ratio="16/9"></v-img>
+                                <v-img :src="activity.picture" :aspect-ratio="16 / 9" cover></v-img>
                                 <v-card-title>{{ activity.name }}</v-card-title>
-                                <v-card-subtitle class="">{{ activity.type }}</v-card-subtitle>
+                                <v-card-subtitle>{{ activity.type }}</v-card-subtitle>
                                 <v-card-text>
-                                    <p class="pb-4">{{ activity.description }}</p>
+                                    <p class="pb-4 card-description">{{ activity.description }}</p>
                                     <v-chip :color="getStatusColor(activity.status)">{{ activity.status }}</v-chip>
                                 </v-card-text>
                             </v-card>
@@ -26,10 +35,17 @@
 </template>
 
 <script setup>
+import { ref, computed } from 'vue';
+
 const activities = ref([]);
+const selectedFilter = ref('all');
 
 const filteredActivities = computed(() => {
-    return activities.value.filter(activity => activity.status !== 'Disable');
+    if (selectedFilter.value === 'all') {
+        return activities.value.filter(activity => activity.status.toLowerCase() !== 'disable');
+    } else {
+        return activities.value.filter(activity => activity.status.toLowerCase() === selectedFilter.value);
+    }
 });
 
 const getStatusColor = (status) => {
@@ -56,3 +72,14 @@ async function fetchData() {
 }
 fetchData();
 </script>
+
+<style>
+.card-description {
+    overflow: hidden;
+    /* Hide overflowing text */
+    text-overflow: ellipsis;
+    /* Display ellipsis (...) for overflowing text */
+    white-space: nowrap;
+    /* Prevent text wrapping */
+}
+</style>

@@ -11,11 +11,11 @@ export class Activity {
   @Prop({ required: true })
   description: string;
 
-  // @Prop({ required: true })
-  // date: Date;
+  @Prop({ type: Date }) // Change type to Date
+  date: Date;
 
-  // @Prop({ required: true })
-  // time: string;
+  @Prop({}) // Change type to string
+  time: string;
 
   @Prop({ enum: ['How to Live', 'How to Learn'], required: true })
   type: string;
@@ -37,6 +37,9 @@ export class Activity {
 
   @Prop()
   picture: string;
+
+  @Prop({ required: true })
+  place: string;
 }
 
 export const ActivitySchema = SchemaFactory.createForClass(Activity);
